@@ -155,8 +155,6 @@ main {
   text-align: left;
   margin: 0 auto;
   width: max(728px, 100%);
-  /* min-height: 96px; */
-  /* height: 341px; */
   border-collapse: collapse;
 }
 
