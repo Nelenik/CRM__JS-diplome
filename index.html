@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/normalize.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/form.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+  <script src="./libs/inputmask.min.js" defer></script>
+  <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+  <script src="./js/my-tooltip/tooltip-constructor.js" defer></script>
+  <script src="./js/client-form.js" defer></script>
+  <script src="./js/modal-constructor/modalconstructor.js" defer></script>
+  <script src="./js/client-consturctor.js" defer></script>
+  <script src="./js/client-manager.js" defer></script>
+  <noscript>
+    <style>
+      .simplebar-content-wrapper {
+        overflow: auto;
+      }
+    </style>
+  </noscript>
+  <title>Document</title>
+</head>
+
+<body class="page">
+  <header class="header">
+    <div class="container header__container">
+      <a class="header__logo" aria-label="Logo"><svg width="50" height="50">
+          <use xlink:href="icons.svg#logo"></use>
+        </svg></a>
+      <form class="header__search" name="search-form">
+        <label><input type="text" placeholder="Введите запрос"></label>
+      </form>
+    </div>
+  </header>
+  <main>
+    <section class="clients">
+      <div class="container clients__container">
+        <h1 class="clients__title">Клиенты</h1>
+        <div class="table-wrap" data-simplebar>
+
+          <table class="clients__table">
+            <thead class="clients__thead">
+              <tr>
+                <th class="clients__th"><button class="btn-reset th-btn id-btn sorted" type="button" data-sort="id">
+                    ID
+                  </button></th>
+                <th class="clients__th"><button class="btn-reset th-btn fio-btn" type="button" data-sort="solidFullName">
+                    Фамилия Имя Отчество
+                  </button></th>
+                <th class="clients__th"><button class="btn-reset th-btn date-btn" type="button" data-sort="createdAt">
+                    Дата и время создания
+                  </button></th>
+                <th class="clients__th"><button class="btn-reset th-btn date-btn" type="button" data-sort="updatedAt">
+                    Последние изменения
+                  </button></th>
+                <th class="clients__th"><span class="contacts">Контакты</span></th>
+                <th class="clients__th"><span class="actions">Действия</span></th>
+              </tr>
+            </thead>
+            <tbody class="clients__tbody">
+
+            </tbody>
+          </table>
+        </div>
+
+        <button class="new-btn btn-reset" type="button">
+          <svg class="new-btn__icon" width="22" height="16">
+            <use xlink:href="icons.svg#add-client"></use>
+          </svg>
+          Добавить клиента
+        </button>
+      </div>
+    </section>
+
+  </main>
+</body>
+
+</html>

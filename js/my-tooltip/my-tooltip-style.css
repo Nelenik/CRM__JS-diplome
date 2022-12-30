@@ -1,0 +1,40 @@
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    padding: 7px 17px;
+    background-color: #333333;
+    color: white;
+}
+
+.tooltip-arrow {
+    width: 7px;
+    height: 7px;
+}
+
+.tooltip-arrow::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 7.5px 0 7.5px;
+    border-color: #333333 transparent transparent transparent;
+    outline: 3px solid transparent;
+}
+.tooltip::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 130%;
+    z-index: -1;
+}
+.tooltip--visible {
+    visibility: visible;
+    opacity: 1;
+}

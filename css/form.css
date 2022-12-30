@@ -1,0 +1,70 @@
+.form {}
+
+.edit-client-form {}
+
+.add-client-form {}
+
+.form__title {}
+
+.title-id {}
+
+/* inputs */
+
+.form__input {}
+
+.surname-input {}
+
+.name-input {}
+
+.lastname-input {}
+
+.form__label {}
+
+/* contacts */
+.contacts-wrap {}
+
+.contacts-group {}
+
+.contacts-group__add-btn {}
+
+.contacts-group__add-btn svg {
+  color: #9873FF;
+}
+
+.contact-single {
+  display: flex;
+}
+
+
+
+.contact-single__type {}
+
+.type {
+  display: inline-block;
+  position: relative;
+  width: 123px;
+
+}
+.additional-contact-type {
+  width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+
+.contact-single__value-input {}
+
+.contact-single__delete-btn {}
+
+.contact-single__delete-btn svg {
+  color: #B0B0B0;
+}
+
+/* choices styles */
+.choices {
+  margin: 0;
+}
+.choices__list--dropdown .choices__item, .choices__list[aria-expanded] .choices__item {
+  padding: 10px;
+}
