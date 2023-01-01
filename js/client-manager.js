@@ -127,13 +127,12 @@ async function showClientCard() {
     animTime: 400,
     easing: 'linear',
     modalWrapperClass: 'client-card-wrapper',
+    afterClose: (e) => {
+      console.log(e.target)
+      history.pushState(null, null, getBaseUrl())
+    }
   })
   card.open()
-  card.core.modalEl.addEventListener('click', function(e) {
-    e.preventDefault();
-    card.close();
-    history.pushState(null, null, getBaseUrl())
-  })
   return card
 }
 
@@ -300,7 +299,6 @@ async function createClientManager() {
   })
   // кастомный обработчик закрытия модалки
   document.addEventListener('modalOnClose', function resetModal(e) {
-    console.log('hello')
     if (e.target.name == 'addForm') {
       e.target.reset()
       e.target.querySelector('.contacts-group').innerHTML = ''
@@ -310,6 +308,7 @@ async function createClientManager() {
     if (errors.length) {
       for (const errorEl of errors) errorEl.remove()
     }
+    document.removeEventListener('modalOnClose', resetModal)
   })
   // modal for edit client form
   document.addEventListener('click', async function (e) {

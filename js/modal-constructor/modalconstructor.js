@@ -15,7 +15,10 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
         modalOverlayClass: "modal-overlay",
         modalWrapperClass: "modal-wrapper",
         modalOpenClass: "modal-open",
-
+        beforeOpen: ()=> {},
+        afterOpen: ()=> {},
+        beforeClose: ()=> {},
+        afterClose: () => {},
       };
       this.options = Object.assign(defaults, userOptions);
       this.isStatic = this.options.isStatic;
@@ -95,8 +98,8 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
         this.setFocus();
         this.catchFocus();
       }, this.animTime)
-      document.addEventListener('click', this.closeByClick.bind(this), {once: true})
-      document.addEventListener('keyup', this.closeByEsc.bind(this), {once: true})
+      document.addEventListener('click', this.closeByClick.bind(this))
+      document.addEventListener('keyup', this.closeByEsc.bind(this))
     },
 
     closeModal() {
@@ -172,19 +175,25 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
     openByClick(e) {
       const { autoOpen } = this.options;
       if (autoOpen && e.target === this.triggerBtn) {
+        this.options.beforeOpen(e);
         this.openModal();
-        this.manageScroll()
+        this.manageScroll();
+        this.options.afterOpen(e)
       }
     },
     closeByClick(e) {
       const { modalCloseBtnClass, modalOverlayClass, modalWrapperClass } = this.options;
       if (this.isOpen && (e.target.closest(`.${modalCloseBtnClass}`) || !e.target.closest(`.${modalWrapperClass}`) && e.target.matches(`.${modalOverlayClass}`))) {
+        this.options.beforeClose(e)
         this.closeModal();
+        this.options.afterClose(e)
       }
     },
     closeByEsc(e) {
       if (this.isOpen && e.code == 'Escape') {
+        this.options.beforeClose(e)
         this.closeModal()
+        this.options.afterClose(e)
       };
     },
 
