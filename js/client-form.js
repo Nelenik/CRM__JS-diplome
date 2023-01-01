@@ -159,11 +159,15 @@ function createForm({ onSave, onEdit, onDelete }, client) {
   formEl.append(formTitleEl, closeBtn, ...inputBlocks, contactsWrap, submitBtn, cancelOrDelBtn)
 
   // обработчик для кнопок добавить и удалить контакт
-  document.addEventListener('click', addDelContactHandler(contactsGroup, addContactBtn))
+  const addDelContactListener = addDelContactHandler(contactsGroup, addContactBtn)
+  document.addEventListener('click', addDelContactListener)
 
-    // при закрытии модалки сбрасывается валидация
-    document.addEventListener('modalOnClose', function (e) {
-      validation.refresh()
+    // при закрытии модалки сбрасывается валидация и ненужные обработчики
+    document.addEventListener('modalOnClose', function resetValidation(e) {
+      validation.refresh();
+      document.removeEventListener('click', addDelContactListener)
+      document.removeEventListener('modalOnClose', resetValidation)
+
     })
 
   // обработчики кнопок формы удаления клиента/отмены
@@ -298,7 +302,7 @@ function checkContactsCount(count, btn) {
 }
 // обработчик кнопок удалить/добавить контакт
 function addDelContactHandler(contactsGroup, addContactBtn) {
-  return function (e) {
+  return function(e) {
     const existingContacts = contactsGroup.querySelectorAll('.contact-single').length
     let count = existingContacts ? existingContacts : 0
     if (e.target === addContactBtn) {
@@ -314,6 +318,7 @@ function addDelContactHandler(contactsGroup, addContactBtn) {
       checkContactsCount(count, addContactBtn)
       e.target.closest('.contact-single').remove()
     }
+
   }
 }
 // ф-я формирование объекта с данными клиента

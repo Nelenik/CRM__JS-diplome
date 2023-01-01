@@ -299,7 +299,8 @@ async function createClientManager() {
     newCl.open()
   })
   // кастомный обработчик закрытия модалки
-  document.addEventListener('modalOnClose', function (e) {
+  document.addEventListener('modalOnClose', function resetModal(e) {
+    console.log('hello')
     if (e.target.name == 'addForm') {
       e.target.reset()
       e.target.querySelector('.contacts-group').innerHTML = ''
@@ -308,7 +309,6 @@ async function createClientManager() {
     const errors = e.target.querySelectorAll('.error-message');
     if (errors.length) {
       for (const errorEl of errors) errorEl.remove()
-
     }
   })
   // modal for edit client form
