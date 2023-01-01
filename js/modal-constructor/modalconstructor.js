@@ -98,8 +98,8 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
         this.setFocus();
         this.catchFocus();
       }, this.animTime)
-      document.addEventListener('click', this.closeByClick.bind(this), {once: true})
-      document.addEventListener('keyup', this.closeByEsc.bind(this), {once: true})
+      document.addEventListener('click', this.closeByClick.bind(this))
+      document.addEventListener('keyup', this.closeByEsc.bind(this))
     },
 
     closeModal() {
