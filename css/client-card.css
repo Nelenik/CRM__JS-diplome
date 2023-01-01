@@ -1,0 +1,31 @@
+/* modal for client card */
+.client-card-wrapper {
+  background-color: #fff;
+  min-height: 200px;
+  width: 70%;
+  border-radius: 20px;
+}
+
+.card {
+
+}
+.card__title {}
+
+.card__id {}
+
+.card__contacts {}
+
+.contacts {}
+
+.contacts__title {}
+
+.contacts__list {}
+
+.contacts__item {}
+
+.contact {
+
+}
+.contact__type {}
+
+.contact__link {}

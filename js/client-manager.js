@@ -128,7 +128,6 @@ async function showClientCard() {
     easing: 'linear',
     modalWrapperClass: 'client-card-wrapper',
     afterClose: (e) => {
-      console.log(e.target)
       history.pushState(null, null, getBaseUrl())
     }
   })
@@ -154,7 +153,6 @@ function createErrorMessage(message, elToPlace) {
 
 // фнкция создания индикатора загрузки
 function createLoader(size, el) {
-  console.log('i am spiner')
   inner = size == 'small' ? `<svg class="loader-spinner-${size}" width="16" height="16" >
   <use xlink:href="icons.svg#load-small"></use>
   </svg>` : `<svg class="loader-spinner-${size}" width="40" height="40" >
@@ -338,7 +336,6 @@ async function createClientManager() {
   document.addEventListener('click', function (e) {
     const target = e.target.closest('.client-row__link');
     if (!target) return;
-    console.log(target.dataset.id)
     window.location.hash = `${target.dataset.id}`
   })
 }
@@ -346,7 +343,7 @@ async function createClientManager() {
 createClientManager()
 
 // открытие карточки при смене hash
-let card;
+let card;//client card for reading
 window.addEventListener('hashchange', async function (e) {
   if (isBaseUrl()) {
     card.close()
@@ -354,8 +351,11 @@ window.addEventListener('hashchange', async function (e) {
   }
 
   card = await showClientCard()
-  console.log(card)
 })
 
 // открытие карточки при загрузке страницы
-window.addEventListener('load',  showClientCard)
+// window.addEventListener('load',  showClientCard)
+window.addEventListener('load',  function(e) {
+  showClientCard()
+  history.replaceState(null, null, window.location.href)
+})

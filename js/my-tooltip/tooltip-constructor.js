@@ -82,7 +82,6 @@ function MyTooltip(trigger, userOptions) {
                 }.bind(this))
             }
 
-
             document.addEventListener('click', function (e) {
                 if (this.isShown && (e.target.closest('.shown') !== this.triggerBtn)) this.hideTooltip()
 

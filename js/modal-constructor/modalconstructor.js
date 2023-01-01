@@ -15,10 +15,10 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
         modalOverlayClass: "modal-overlay",
         modalWrapperClass: "modal-wrapper",
         modalOpenClass: "modal-open",
-        beforeOpen: ()=> {},
-        afterOpen: ()=> {},
-        beforeClose: ()=> {},
-        afterClose: () => {},
+        beforeOpen: (event)=> {},
+        afterOpen: (event)=> {},
+        beforeClose: (event)=> {},
+        afterClose: (event) => {},
       };
       this.options = Object.assign(defaults, userOptions);
       this.isStatic = this.options.isStatic;
@@ -98,8 +98,8 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
         this.setFocus();
         this.catchFocus();
       }, this.animTime)
-      document.addEventListener('click', this.closeByClick.bind(this))
-      document.addEventListener('keyup', this.closeByEsc.bind(this))
+      document.addEventListener('click', this.closeByClick.bind(this), {once: true})
+      document.addEventListener('keyup', this.closeByEsc.bind(this), {once: true})
     },
 
     closeModal() {
