@@ -69,7 +69,7 @@ function createDelConfirmInner({ onDelete }, id) {
     classes: ['confirm'],
     inner: `
     <button class="btn-reset confirm__close-btn modal-close" type="button">╳</button>
-    <h2 class="confrim__title">Удалить клиента</h2>
+    <h2 class="confrim__title" id="delCl">Удалить клиента</h2>
     <p class="confirm__question">Вы действительно хотите удалить данного клиента?</p>`
   });
   const confirmDelBtn = createHtml({
@@ -292,6 +292,7 @@ async function createClientManager() {
       modalInner: createForm(handlers),
       animTime: 500,
       modalCloseBtnClass: 'modal-close',
+      ariaLabelledbyId: 'newClForm'
     })
     newCl.open()
   })
@@ -317,6 +318,7 @@ async function createClientManager() {
       modalInner: createForm(handlers, client),
       animTime: 500,
       modalCloseBtnClass: 'modal-close',
+      ariaLabelledbyId: 'editClForm'
     })
     editModal.open()
   })
@@ -328,7 +330,8 @@ async function createClientManager() {
     const confirmDelModal = new ModalConstructor(target, {
       modalInner: createDelConfirmInner(handlers, target.dataset.id),
       animTime: 500,
-      modalCloseBtnClass: 'modal-close'
+      modalCloseBtnClass: 'modal-close',
+      ariaLabelledbyId: 'delCl'
     })
     confirmDelModal.open()
   })

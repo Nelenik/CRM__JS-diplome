@@ -91,7 +91,7 @@ function Client(data) {
     const editBtn = createHtml({
       tagName: 'button',
       classes: ['btn-reset', 'client-row__edit-btn'],
-      attributes: { type: 'button', 'data-id': id },
+      attributes: { type: 'button', 'data-id': id, 'aria-haspopup': true },
       inner: `<svg width="12" height="12">
       <use xlink:href="icons.svg#edit"></use>
       </svg> Изменить`
@@ -99,7 +99,7 @@ function Client(data) {
     const deletBtn = createHtml({
       tagName: 'button',
       classes: ['btn-reset', 'client-row__delete-btn'],
-      attributes: { type: 'button', 'data-id': id },
+      attributes: { type: 'button', 'data-id': id,  'aria-haspopup': true },
       inner: `<svg width="12" height="12">
       <use xlink:href="icons.svg#delete"></use>
       </svg> Удалить`,

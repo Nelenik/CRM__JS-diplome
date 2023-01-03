@@ -26,6 +26,7 @@ function createForm({ onSave, onEdit, onDelete }, client) {
   const formTitleEl = createHtml({
     tagName: 'h2',
     classes: ['form__title'],
+    attributes: {id: editForm? 'editClForm': 'newClForm'},
     inner: editForm ? `Изменить данные <span class="text--grey title-id">ID: ${client.id}</span>` : 'Новый клиент',
   })
   const closeBtn = createHtml({

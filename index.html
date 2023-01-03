@@ -40,8 +40,8 @@
       <a class="header__logo" aria-label="Logo"><svg width="50" height="50">
           <use xlink:href="icons.svg#logo"></use>
         </svg></a>
-      <form class="header__search" name="search-form">
-        <label><input type="text" placeholder="Введите запрос"></label>
+      <form class="header__search" name="searchForm">
+        <label><input type="text" placeholder="Введите запрос" name="searchInput" autofocus autocomplete="off" aria-autocomplete="list" aria-controls="searchResults" aria-activedescendant="result-1" aria-expanded="false"></label>
       </form>
     </div>
   </header>
@@ -76,7 +76,7 @@
           </table>
         </div>
 
-        <button class="new-btn btn-reset" type="button">
+        <button class="new-btn btn-reset" type="button" aria-haspopup="true">
           <svg class="new-btn__icon" width="22" height="16">
             <use xlink:href="icons.svg#add-client"></use>
           </svg>

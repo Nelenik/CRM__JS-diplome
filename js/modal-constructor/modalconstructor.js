@@ -15,6 +15,7 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
         modalOverlayClass: "modal-overlay",
         modalWrapperClass: "modal-wrapper",
         modalOpenClass: "modal-open",
+        ariaLabelledbyId: '',
         beforeOpen: (event)=> {},
         afterOpen: (event)=> {},
         beforeClose: (event)=> {},
@@ -64,13 +65,13 @@ function ModalConstructor(triggerSelectorOrEl, userOptions) {
     },
 
     createModalWrapper() {
-      const { modalInner, modalWrapperClass } = this.options;
+      const {ariaLabelledbyId, modalInner, modalWrapperClass } = this.options;
       if (!modalInner) return;
       let isObject = typeof modalInner === 'object';
       const wrapper = this.createHtml({
         tagName: 'div',
         classes: [modalWrapperClass],
-        attributes: { "tabindex": '0' }
+        attributes: { "tabindex": '0', role: 'dialog', 'aria-labelledby': `${ariaLabelledbyId}` }
       })
       isObject ? wrapper.append(modalInner) : wrapper.innerHTML = modalInner;
       return wrapper

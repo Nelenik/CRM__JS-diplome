@@ -63,6 +63,15 @@
   border-top: 1px solid transparent;
 }
 
+.client-row:hover:not(.client-found) {
+  background-color: rgba(184, 158, 255, 0.5);
+  ;
+}
+.client-found {
+  background-color: rgba(255, 165, 0, 0.5);
+
+}
+
 /* .client-row:last-child {
   border-bottom: 1px solid transparent;
 } */
