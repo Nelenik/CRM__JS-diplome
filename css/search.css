@@ -28,10 +28,11 @@
   outline: none;
 }
 
-.result-link:hover:not(.is-highlighted){
-  background-color: #B89EFF;
+.result-link:hover:not(.is-highlighted):not(:focus-visible){
+  background-color: rgba(200, 197, 209, 0.5);
 }
 
-.result-link.is-highlighted {
-  background-color: #B89EFF;
+.result-link.is-highlighted,
+.result-link:focus-visible {
+  background-color: rgba(200, 197, 209, 0.5);
 }

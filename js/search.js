@@ -5,26 +5,41 @@ function SearchAutocomplete(form, input, userOptions) {
   this.core = {
     main() {
       const defaults = {
+        requestStr: '',
         onInput: (event, _this) => { },
         onItemClick: (event) => { }
       };
       this.options = Object.assign(defaults, userOptions);
       this.form = form;
       this.input = input;
-      this.requestStr = 'http://localhost:3000/api/clients?search=';
+      this.requestStr = this.options.requestStr;
       this.expanded = false;
       this.resultList;
-      this.resultArr = [];
+      this.resultLinksArr = [];
+      this.firstResLink;
+      this.lastResLink;
+      this.currentFocusedIdx;
       this.keydownHandler = (e) => {
-        console.log(e.target)
         const keys = {
           UP: 'ArrowUp', DOWN: 'ArrowDown', HOME: 'PageUp', END: 'PageDown'
         }
-        if (this.expanded && e.code == keys.DOWN) {
-          this.resultArr[0].focus()
-          this.resultArr[0].classList.add('is-highlighted')
+        if (this.expanded && this.isFocused(this.input) && e.code == keys.DOWN) {
+          this.setFirstElFocus()
+        }else if (this.expanded && !this.isFocused(this.input)) {
+          switch (e.code) {
+            case keys.UP:
+              return this.setPrevElFocus();
+            case keys.DOWN:
+              return this.setNextElFocus();
+            case keys.HOME:
+              return this.setFirstElFocus();
+            case keys.END:
+              return this.setLastElFocus();
+            default:
+              return null
+          }
         }
-      };//handler move to first item of list of results
+      };//handler move focus by arrows and pageup/pagedown keys
       this.setAutocomplete()
 
     },
@@ -49,17 +64,21 @@ function SearchAutocomplete(form, input, userOptions) {
       }.bind(this))
 
     },
-
+    // очищаем список результатов
     hideResults() {
-      this.expanded = false,
-        this.resultList.innerHTML = '',
-        this.input.ariaExpanded = 'false',
-        this.form.classList.remove('list-is-shown')
+      this.expanded = false;
+      this.resultList.innerHTML = '';
+      this.input.ariaExpanded = 'false';
+      this.form.classList.remove('list-is-shown')
       this.input.value = '';
+      this.resultLinksArr = [];
+      this.firstResLink = null;
+      this.lastResLink = null;
       document.removeEventListener('keydown', this.keydownHandler)
     },
-
+    //создаем список результатов на базе запроса
     async showResults(e) {
+      if (!this.input.value) { this.hideResults(); return }
       this.expanded = true;
       let data = await this.getClientsBySearch(input.value);
       this.resultList.innerHTML = '';
@@ -68,13 +87,14 @@ function SearchAutocomplete(form, input, userOptions) {
         if (ind == 0) { _this.firstItemId = itemId; }
         this.resultList.append(this.createResultItem(obj, itemId))
       })
-
-      this.setFocusByArrows()
+      this.resultLinksArr = [...this.resultList.querySelectorAll('.result-link')];
+      this.firstResLink = this.resultLinksArr[0];
+      this.lastResLink = this.resultLinksArr[this.resultLinksArr.length - 1];
       this.input.ariaExpanded = 'true';
-      this.form.classList.add('list-is-shown')
-      this.options.onInput(e, _this)
+      this.form.classList.add('list-is-shown');
+      this.options.onInput(e, _this);
+      document.addEventListener('keydown', this.keydownHandler)
 
-      if (!this.input.value) { this.hideResults() }
     },
 
     async getClientsBySearch(searchValue) {
@@ -129,13 +149,43 @@ function SearchAutocomplete(form, input, userOptions) {
       if (options.value) tag.value = options.value;
       return tag;
     },
-    // navigation by arrows and pageup/pagedown
-    setFocusByArrows() {
-      this.resultArr = this.resultList.querySelectorAll('.result-link');
-      document.addEventListener('keydown', this.keydownHandler)
+
+    /***navigation by arrows and pageup/pagedown****/
+    //настройка фокуса предыдущему эл-ту списка
+    setPrevElFocus() {
+      const prevFoucsedIdx = this.currentFocusedIdx -1;
+      if(prevFoucsedIdx < 0) return this.setLastElFocus();
+      this.focus(this.resultLinksArr[prevFoucsedIdx]);
+      this.currentFocusedIdx = prevFoucsedIdx;
     },
-    setPrevElFocus() {},
-    setNextElFocus() {},
+    //настройка фокуса следующему эл-ту списка
+    setNextElFocus() {
+      const nextFocusedIdx = this.currentFocusedIdx + 1;
+      if(nextFocusedIdx > this.resultLinksArr.length-1) return this.setFirstElFocus();
+      this.focus(this.resultLinksArr[nextFocusedIdx]);
+      this.currentFocusedIdx = nextFocusedIdx;
+    },
+    //настройка фокуса первому эл-ту списка
+    setFirstElFocus() {
+      if (!this.resultLinksArr.length) return;
+      this.focus(this.firstResLink);
+      this.currentFocusedIdx = 0;
+    },
+    //настройка фокуса последнему эле-ту списка
+    setLastElFocus() {
+      this.focus(this.lastResLink);
+      this.currentFocusedIdx = this.resultLinksArr.length -1;
+    },
+    //настраивает фокус элементу
+    focus(el) {
+      el.focus();
+      el.classList.add('is-highlighted');
+      el.addEventListener('blur', function blurEl(e) {
+        el.classList.remove('is-highlighted');
+        el.removeEventListener('blur', blurEl)
+      })
+    },
+    // ф-я проверяет в фокусе ли элемент
     isFocused(el) {
       return document.activeElement === el
     },
@@ -148,6 +198,7 @@ function SearchAutocomplete(form, input, userOptions) {
 const searchForm = document.querySelector('[name="searchForm"]');
 const searchInput = searchForm.searchInput
 const search = new SearchAutocomplete(searchForm, searchInput, {
+  requestStr: 'http://localhost:3000/api/clients?search=',
   onInput: (e, obj) => {
   },
   onItemClick: (e) => {
@@ -170,10 +221,11 @@ new SearchAutocomplete(form, input, userOptions), где form -element,  это 
 
 
 userOptions:
+-- requestStr: (string, def: '') строка с частью url запроса, без значения из инпута, оно добавляется плагином
 --  onInput: (event, obj) => {} - колбэк который принимает в качестве агрументов объект события при вводе в поле, а также экземпляр конструктора
 --onItemClick(e) => {} - колбэк, позволяет добавить действия при клике на результат выбора, в качетсве аргумента принимает объект события.
 
 
 Доступность:
-Конструктор возвращает id первого элемента списка результатов, это значение нужно для настройки атрибута  aria-activedescendant.
+Конструктор возвращает id первого элемента списка результатов, это значение нужно для настройки атрибута  aria-activedescendant, а также id списка результатов для настрйки атрибута aria-controls. чтобы получить эти данные лучше использовать колбэк onInput
 */
