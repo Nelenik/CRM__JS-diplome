@@ -163,6 +163,10 @@ main {
   cursor: pointer;
 }
 
+.simplebar-content-wrapper:focus {
+  outline: none;
+}
+
 /* modal overlay & wrapper, modal-open*/
 .modal-overlay {
   position: fixed;
@@ -180,9 +184,8 @@ main {
 
 .modal-wrapper {
   background-color: #fff;
-  min-height: 200px;
-  width: 70%;
-  border-radius: 20px;
+  min-height: 400px;
+  width: 44%;
 }
 
 .modal-overlay.modal-open {

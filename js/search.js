@@ -6,8 +6,9 @@ function SearchAutocomplete(form, input, userOptions) {
     main() {
       const defaults = {
         requestStr: '',
-        onInput: (event, _this) => { },
-        onItemClick: (event) => { }
+        beforeInput: () => { },
+        afterInput: () => { },
+        onItemClick: () => { }
       };
       this.options = Object.assign(defaults, userOptions);
       this.form = form;
@@ -25,7 +26,7 @@ function SearchAutocomplete(form, input, userOptions) {
         }
         if (this.expanded && this.isFocused(this.input) && e.code == keys.DOWN) {
           this.setFirstElFocus()
-        }else if (this.expanded && !this.isFocused(this.input)) {
+        } else if (this.expanded && !this.isFocused(this.input)) {
           switch (e.code) {
             case keys.UP:
               return this.setPrevElFocus();
@@ -45,8 +46,10 @@ function SearchAutocomplete(form, input, userOptions) {
     },
 
     setAutocomplete() {
-      this.resultList = this.createDropdown();
-      this.form.append(this.resultList);
+      const listWrapper = this.createListWrapper()
+      this.resultList = this.createList();
+      listWrapper.append(this.resultList)
+      this.form.append(listWrapper);
       this.input.addEventListener('input', this.showResults.bind(this))
 
       document.addEventListener('keyup', function (e) {
@@ -79,6 +82,7 @@ function SearchAutocomplete(form, input, userOptions) {
     //создаем список результатов на базе запроса
     async showResults(e) {
       if (!this.input.value) { this.hideResults(); return }
+      this.options.beforeInput(e, _this)
       this.expanded = true;
       let data = await this.getClientsBySearch(input.value);
       this.resultList.innerHTML = '';
@@ -92,7 +96,7 @@ function SearchAutocomplete(form, input, userOptions) {
       this.lastResLink = this.resultLinksArr[this.resultLinksArr.length - 1];
       this.input.ariaExpanded = 'true';
       this.form.classList.add('list-is-shown');
-      this.options.onInput(e, _this);
+      this.options.afterInput(e, _this);
       document.addEventListener('keydown', this.keydownHandler)
 
     },
@@ -103,13 +107,21 @@ function SearchAutocomplete(form, input, userOptions) {
       return data;
     },
 
-    createDropdown() {
+    createListWrapper() {
+      const listWrapper = this.createHtml({
+        tagName: 'div',
+        classes: ['results-wrap']
+      })
+      return listWrapper
+    },
+
+    createList() {
       const listId = 'searchResults';
       _this.resultsListId = listId;
       const resultsList = this.createHtml({
         tagName: 'ul',
         classes: ['results-list'],
-        attributes: { id: listId, 'data-simplebar': '', }
+        attributes: { id: listId,}
       });
       return resultsList
     },
@@ -153,15 +165,15 @@ function SearchAutocomplete(form, input, userOptions) {
     /***navigation by arrows and pageup/pagedown****/
     //настройка фокуса предыдущему эл-ту списка
     setPrevElFocus() {
-      const prevFoucsedIdx = this.currentFocusedIdx -1;
-      if(prevFoucsedIdx < 0) return this.setLastElFocus();
+      const prevFoucsedIdx = this.currentFocusedIdx - 1;
+      if (prevFoucsedIdx < 0) return this.setLastElFocus();
       this.focus(this.resultLinksArr[prevFoucsedIdx]);
       this.currentFocusedIdx = prevFoucsedIdx;
     },
     //настройка фокуса следующему эл-ту списка
     setNextElFocus() {
       const nextFocusedIdx = this.currentFocusedIdx + 1;
-      if(nextFocusedIdx > this.resultLinksArr.length-1) return this.setFirstElFocus();
+      if (nextFocusedIdx > this.resultLinksArr.length - 1) return this.setFirstElFocus();
       this.focus(this.resultLinksArr[nextFocusedIdx]);
       this.currentFocusedIdx = nextFocusedIdx;
     },
@@ -174,7 +186,7 @@ function SearchAutocomplete(form, input, userOptions) {
     //настройка фокуса последнему эле-ту списка
     setLastElFocus() {
       this.focus(this.lastResLink);
-      this.currentFocusedIdx = this.resultLinksArr.length -1;
+      this.currentFocusedIdx = this.resultLinksArr.length - 1;
     },
     //настраивает фокус элементу
     focus(el) {
@@ -194,34 +206,47 @@ function SearchAutocomplete(form, input, userOptions) {
 }
 
 
-
+/*****инициализация поиска*****/
+let bar;//переменная simplebar
 const searchForm = document.querySelector('[name="searchForm"]');
-const searchInput = searchForm.searchInput
+const searchInput = searchForm.searchInput;
 const search = new SearchAutocomplete(searchForm, searchInput, {
   requestStr: 'http://localhost:3000/api/clients?search=',
-  onInput: (e, obj) => {
+  beforeInput: (e, obj) => {
+    if (bar) bar.unMount()
+  },
+  afterInput: (e, obj) => {
+    bar = new SimpleBar(searchForm.lastElementChild.querySelector('.results-list'))
+    searchForm.querySelector('.simplebar-content-wrapper').setAttribute('tabindex', '')
   },
   onItemClick: (e) => {
-    let tableWrap = document.querySelector('.table-wrap');
-    let resId = e.currentTarget.querySelector('.result-id').textContent
-    let elToScroll = tableWrap.querySelector(`[id="${resId}"]`)
-    elToScroll.scrollIntoView({ block: "center", behavior: "smooth" });
-    elToScroll.classList.add('client-found');
-    tableWrap.addEventListener('click', function (e) {
-      if (e.target.closest('client-row') == elToScroll) return
-      elToScroll.classList.remove('client-found')
-    })
+    markClient(e)
   }
 })
+// ф-я выделяет найденного клиента в таблице и скроллит к нему
+function markClient(e) {
+  let tableWrap = document.querySelector('.table-wrap');
+  let resId = e.currentTarget.querySelector('.result-id').textContent
+  let elToScroll = tableWrap.querySelector(`[id="${resId}"]`)
+  elToScroll.scrollIntoView({ block: "center", behavior: "smooth" });
+  elToScroll.classList.add('client-found');
+  tableWrap.addEventListener('click', function (e) {
+    if (e.target.closest('client-row') == elToScroll) return
+    elToScroll.classList.remove('client-found')
+  })
+}
 
 /*
+Описание работы конструктора SearchAutocomplete
+
 Инициализация:
 new SearchAutocomplete(form, input, userOptions), где form -element,  это форма относительно которой позиционируем элемент, input - element, поле ввода строки для поиска,  userOptions - объект с настройками.
 
 
 userOptions:
 -- requestStr: (string, def: '') строка с частью url запроса, без значения из инпута, оно добавляется плагином
---  onInput: (event, obj) => {} - колбэк который принимает в качестве агрументов объект события при вводе в поле, а также экземпляр конструктора
+-- beforeInput (event, instance) => {} - колбэк, позволяет добавить функционала в начало обработчика события 'input'. Аргументы - объект события и экземпляр
+-- afterInput: (event, instance) => {} - колбэк, позволяет добавить функционала в конец обработчика события 'input'. Аргументы - объект события и экземпляр
 --onItemClick(e) => {} - колбэк, позволяет добавить действия при клике на результат выбора, в качетсве аргумента принимает объект события.
 
 

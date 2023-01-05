@@ -1,16 +1,49 @@
-.form {}
+.form {
+  position: relative;
+  padding: 24px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-.edit-client-form {}
+.form__close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
 
-.add-client-form {}
+/* .edit-client-form {}
 
-.form__title {}
+.add-client-form {} */
 
-.title-id {}
+.form__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: #333333;
+}
+
+
 
 /* inputs */
+.form__label {
+  margin-bottom: 32px;
+  padding-bottom: 4px;
+  width: 100%;
+  border-bottom: 1px solid rgba(200, 197, 209, 0.5);
+}
 
-.form__input {}
+.form__label:nth-child(5) {
+  margin-bottom: 25px;
+}
+
+.form__input {
+  width: 100%;
+  font-size: 14px;
+  line-height: 19px;
+  border: none;
+}
 
 .surname-input {}
 
@@ -18,10 +51,10 @@
 
 .lastname-input {}
 
-.form__label {}
-
 /* contacts */
-.contacts-wrap {}
+.contacts-wrap {
+  align-self: center;
+}
 
 .contacts-group {}
 
@@ -35,8 +68,6 @@
   display: flex;
 }
 
-
-
 .contact-single__type {}
 
 .type {
@@ -45,7 +76,9 @@
   width: 123px;
 
 }
+
 .additional-contact-type {
+  /*styles for additional input for "Доп.контакты" in select*/
   width: 100%;
   position: absolute;
   top: 100%;
@@ -65,6 +98,39 @@
 .choices {
   margin: 0;
 }
-.choices__list--dropdown .choices__item, .choices__list[aria-expanded] .choices__item {
+
+.choices__list--dropdown .choices__item,
+.choices__list[aria-expanded] .choices__item {
   padding: 10px;
 }
+
+.form__submit-btn {
+  align-self: center;
+}
+
+/* styles only for new client form */
+.add-client-form {}
+
+.add-client-form .form__title {
+  margin-bottom: 32px;
+}
+.add-client-form .form__input::placeholder {
+  color: #B0B0B0;
+}
+
+.add-client-form .surname-input::after {
+
+}
+
+.form__cancel-btn {
+  align-self: center;
+}
+
+/* styles only for edit form */
+.edit-client-form {}
+
+.edit-client-form .form__title {}
+
+.title-id {}
+
+.form__delete-btn {}

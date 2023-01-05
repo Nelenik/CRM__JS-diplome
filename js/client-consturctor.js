@@ -86,7 +86,7 @@ function Client(data) {
     }
     const contactsWrap = createHtml({
       tagName: 'div',
-      classes: ['contacts-wrap']
+      classes: ['table-contacts-wrap']
     })
     contactsWrap.append(...contactsArr)
     return [contactsWrap]
