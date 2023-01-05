@@ -66,9 +66,15 @@ img {
   -webkit-tap-highlight-color: transparent;
 }
 
-.text {}
+.text {
+  font-size: 14px;
+  line-height: 19px;
+  color: #333333;
+}
 
-.text--grey {}
+.text--grey {
+  color: #B0B0B0;
+}
 
 .container {
   max-width: 1024px;
@@ -132,6 +138,17 @@ main {
   color: #9873FF;
 }
 
+.new-btn:focus {
+  outline: none;
+}
+
+.new-btn:focus-visible,
+.new-btn:hover:not(:focus-visible) {
+  color: #fff;
+  background-color: rgb(152, 64, 255);
+  border: 1px solid rgb(152, 64, 255);
+}
+
 .new-btn__icon {
   margin-right: 10px;
 }
@@ -142,7 +159,8 @@ main {
 /* simplebar */
 
 .simplebar-scrollbar::before {
-  background-color: transparent;
+  background-color: #E5E5E5;
+  cursor: pointer;
 }
 
 /* modal overlay & wrapper, modal-open*/
@@ -237,7 +255,7 @@ main {
   position: absolute;
   inset: 0;
   z-index: 1000;
-  background-color:  rgba(245, 245, 245, 0.3);
+  background-color: rgba(245, 245, 245, 0.3);
 }
 
 .loader-spinner-large {
@@ -267,7 +285,11 @@ main {
 }
 
 @keyframes rotate {
-  0% {transform: rotate(0deg)}
-  100% {transform: rotate(360deg)}
-}
+  0% {
+    transform: rotate(0deg)
+  }
 
+  100% {
+    transform: rotate(360deg)
+  }
+}

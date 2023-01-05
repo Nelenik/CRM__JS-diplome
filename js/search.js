@@ -203,7 +203,6 @@ const search = new SearchAutocomplete(searchForm, searchInput, {
   },
   onItemClick: (e) => {
     let tableWrap = document.querySelector('.table-wrap');
-    console.log(e.currentTarget)
     let resId = e.currentTarget.querySelector('.result-id').textContent
     let elToScroll = tableWrap.querySelector(`[id="${resId}"]`)
     elToScroll.scrollIntoView({ block: "center", behavior: "smooth" });

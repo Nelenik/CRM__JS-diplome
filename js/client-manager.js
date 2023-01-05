@@ -357,7 +357,6 @@ window.addEventListener('hashchange', async function (e) {
 })
 
 // открытие карточки при загрузке страницы
-// window.addEventListener('load',  showClientCard)
 window.addEventListener('load',  function(e) {
   showClientCard()
   history.replaceState(null, null, window.location.href)
