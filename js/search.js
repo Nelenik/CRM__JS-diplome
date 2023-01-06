@@ -57,6 +57,9 @@ function SearchAutocomplete(form, input, userOptions) {
           this.hideResults()
           this.input.focus()
         }
+        if (this.expanded && e.code == 'Tab' && !this.form.contains(document.activeElement)) {
+          this.hideResults()
+        }
       }.bind(this))
 
       document.addEventListener('click', function (e) {
@@ -81,7 +84,8 @@ function SearchAutocomplete(form, input, userOptions) {
     },
     //создаем список результатов на базе запроса
     async showResults(e) {
-      if (!this.input.value) { this.hideResults(); return }
+      setTimeout(async () => {
+        if (!this.input.value) { this.hideResults(); return }
       this.options.beforeInput(e, _this)
       this.expanded = true;
       let data = await this.getClientsBySearch(input.value);
@@ -98,7 +102,7 @@ function SearchAutocomplete(form, input, userOptions) {
       this.form.classList.add('list-is-shown');
       this.options.afterInput(e, _this);
       document.addEventListener('keydown', this.keydownHandler)
-
+      }, 300)
     },
 
     async getClientsBySearch(searchValue) {
@@ -227,7 +231,7 @@ const search = new SearchAutocomplete(searchForm, searchInput, {
 function markClient(e) {
   let tableWrap = document.querySelector('.table-wrap');
   let resId = e.currentTarget.querySelector('.result-id').textContent
-  let elToScroll = tableWrap.querySelector(`[id="${resId}"]`)
+  let elToScroll = tableWrap.querySelector(`[data-row-id="${resId}"]`)
   elToScroll.scrollIntoView({ block: "center", behavior: "smooth" });
   elToScroll.classList.add('client-found');
   tableWrap.addEventListener('click', function (e) {

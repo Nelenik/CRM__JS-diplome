@@ -74,12 +74,15 @@ function createForm({ onSave, onEdit, onDelete }, client) {
     if (input.value) {
       placeholder.classList.add('filled-input-value')
     }
-
-    input.onblur = () => {
+    input.addEventListener('input', function(e) {
+      if(input.value) placeholder.classList.add('filled-input-value')
+    })
+    input.addEventListener('blur', function(e) {
       if (!input.value) {
         placeholder.classList.remove('filled-input-value')
       }
-    }
+
+    })
 
   }
   // создаем блок с контактами

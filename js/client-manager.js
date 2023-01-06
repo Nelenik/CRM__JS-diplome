@@ -27,7 +27,7 @@ function createCells(obj, row, cellName) {
 function createTableRow(client, tBody) {
   const row = tBody.insertRow();
   row.classList.add('client-row')
-  row.setAttribute('id', `${client.id}`);
+  row.setAttribute('data-row-id', `${client.id}`);
   createCells(client.toRenderTable, row, 'td')
 }
 // tBody
@@ -69,7 +69,7 @@ function createDelConfirmInner({ onDelete }, id) {
     classes: ['confirm'],
     inner: `
     <button class="btn-reset confirm__close-btn modal-close" type="button">╳</button>
-    <h2 class="confrim__title" id="delCl">Удалить клиента</h2>
+    <h2 class="confirm__title" id="delCl">Удалить клиента</h2>
     <p class="confirm__question">Вы действительно хотите удалить данного клиента?</p>`
   });
   const confirmDelBtn = createHtml({
@@ -102,7 +102,7 @@ function createClientCardInner(clientData) {
   let clientCard = createHtml({
     tagName: 'article',
     classes: ['card'],
-    inner: `<h2 class="card__title">${clientData.surname} ${clientData.name} ${clientData.lastName} <span class="card__id">${clientData.id}</span></h2><div class="card__contacts contacts><h3 class="contacts__title">Контакты</h3><ul class="contacts__list"></ul></div>`
+    inner: `<h2 class="card__title">${clientData.surname} ${clientData.name} ${clientData.lastName} <span class="card__id">ID:${clientData.id}</span></h2><div class="card__contacts contacts"><h3 class="contacts__title">Контакты</h3><ul class="contacts__list"></ul></div>`
   })
   for (const contact of clientData.contacts) {
     let href = contact.type === 'Телефон' ? `tel:${contact.type}` : contact.type === 'Email' ? `mailto:${contact.type}` : contact.type
@@ -112,6 +112,11 @@ function createClientCardInner(clientData) {
       inner: `<span class="contact__type">${contact.type}:</span> <a class="contact__link" href="${href}">${contact.value}`
     })
     clientCard.querySelector('.contacts__list').append(contactEl)
+    // маска на телефон
+    if (/tel/.test(href)) {
+      let selector = contactEl.querySelector('.contact__link');
+      Inputmask({ "mask": "+9 (999) 999-99-99" }).mask(selector);
+    }
   }
   return clientCard
 }
@@ -275,7 +280,7 @@ async function createClientManager() {
     onDelete(clientId, el) {
       const objToDel = renderData.findIndex(item => item.id === clientId);
       renderData.splice(objToDel, 1);
-      const rowToDel = document.querySelector(`[id="${clientId}"]`)
+      const rowToDel = document.querySelector(`[data-row-id="${clientId}"]`)
       rowToDel.remove();
       fetch(`http://localhost:3000/api/clients/${clientId}`, {
         method: 'DELETE'
@@ -291,6 +296,7 @@ async function createClientManager() {
     const newCl = new ModalConstructor('.new-btn', {
       modalInner: createForm(handlers),
       animTime: 500,
+      elemToFocus: '[name="surname"]',
       modalCloseBtnClass: 'modal-close',
       ariaLabelledbyId: 'newClForm'
     })
@@ -317,6 +323,7 @@ async function createClientManager() {
     const editModal = new ModalConstructor(target, {
       modalInner: createForm(handlers, client),
       animTime: 500,
+      elemToFocus: '[name="surname"]',
       modalCloseBtnClass: 'modal-close',
       ariaLabelledbyId: 'editClForm'
     })
@@ -330,17 +337,13 @@ async function createClientManager() {
     const confirmDelModal = new ModalConstructor(target, {
       modalInner: createDelConfirmInner(handlers, target.dataset.id),
       animTime: 500,
+      elemToFocus: '.confirm__del-btn',
       modalCloseBtnClass: 'modal-close',
       ariaLabelledbyId: 'delCl'
     })
     confirmDelModal.open()
   })
   // изменение url при клике на ссылку
-  document.addEventListener('click', function (e) {
-    const target = e.target.closest('.client-row__link');
-    if (!target) return;
-    window.location.hash = `${target.dataset.id}`
-  })
 }
 
 createClientManager()
@@ -357,7 +360,7 @@ window.addEventListener('hashchange', async function (e) {
 })
 
 // открытие карточки при загрузке страницы
-window.addEventListener('load',  function(e) {
+window.addEventListener('load', function (e) {
   showClientCard()
   history.replaceState(null, null, window.location.href)
 })

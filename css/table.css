@@ -75,18 +75,11 @@
   transition: transform 0.4s ease;
 }
 
-.fio-btn::before {
-  content: 'А-Я';
-  position: absolute;
-  top: 50%;
-  right: 45px;
-  transform: translateY(-50%);
-  color: #9873FF;
-}
 
 .sorted.th-btn::after {
   transform: rotate(-180deg);
 }
+
 
 .th-btn:focus {
   outline: none;
@@ -99,6 +92,15 @@
   box-shadow: inset 0px 1px 6px 0px rgb(130, 128, 128);
 }
 
+.fio-btn::before {
+  content: 'А-Я';
+  position: absolute;
+  top: 50%;
+  /* left: 73%; */
+  right: 19%;
+  transform: translateY(-50%);
+  color: #9873FF;
+}
 .clients__tbody {
   background-color: #ffffff;
 }
@@ -236,8 +238,14 @@
   color: rgb(152, 64, 255);
 }
 
+@media (max-width: 1023px) {
+  .fio-btn::before {
+  right: 13%;
+  }
+}
 @media (max-width: 920px) {
   .clients__th:nth-child(6) {
     width: 100px;
   }
 }
+

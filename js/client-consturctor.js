@@ -28,7 +28,7 @@ function Client(data) {
     const client = createHtml({
       tagName: 'a',
       classes: ['text', 'client-row__link'],
-      attributes: { tabindex: '0', 'data-id': id, target: '_blank'},
+      attributes: {href: `#${id}`, tabindex: '0', 'data-id': id},
       text: fullName
     })
     return [client]

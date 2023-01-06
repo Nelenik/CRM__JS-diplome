@@ -1,0 +1,67 @@
+/* del.contact modal */
+.confirm {
+  position: relative;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.confirm__close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-weight: 600;
+  transition: color 0.3s linear;
+}
+
+.confirm__close-btn:focus-visible,
+.confirm__close-btn:hover:not(:focus-visible) {
+  color: rgba(152, 115, 255, 1)
+}
+
+.confirm__title {
+  margin: 0;
+  margin-bottom: 11px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: #333333;
+}
+
+.confirm__question {
+  margin: 0;
+  margin-bottom: 25px;
+  max-width: 275px;
+  color: #333333;
+  text-align: center;
+}
+
+.confirm__del-btn {
+  padding: 12.5px 35px;
+  margin-bottom: 5px;
+  background-color: rgba(128, 82, 255, 1);
+  font-weight: 600;
+  color: #fff;
+  outline: none;
+  transition: background-color 0.3s linear;
+}
+
+.confirm__del-btn:focus,
+.confirm__del-btn:hover:not(:focus) {
+  background-color: rgba(128, 82, 255, 0.5);
+}
+
+.confirm__cancel-btn {
+  font-size: 12px;
+  line-height: 16px;
+  border-bottom: 1px solid #333333;
+  outline: none;
+  transition: color 0.3s linear, border-color 0.3s linear;
+}
+
+.confirm__cancel-btn:focus-visible,
+.confirm__cancel-btn:hover:not(:focus-visible) {
+  color: rgba(152, 115, 255, 1);
+  border-color: rgba(152, 115, 255, 1)
+}

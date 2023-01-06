@@ -155,13 +155,10 @@ main {
   margin-right: 10px;
 }
 
-/* table */
-
-
 /* simplebar */
 
 .simplebar-scrollbar::before {
-  background-color: #E5E5E5;
+  background-color: rgba(245, 245, 245, 0.8);
   cursor: pointer;
 }
 
@@ -186,7 +183,6 @@ main {
 
 .modal-wrapper {
   background-color: #fff;
-  /* min-height: 400px; */
   width: min(92%, 450px);
 }
 
@@ -270,11 +266,18 @@ main {
   color: #9873FF;
 }
 
+.client-row__edit-btn .loader-overlay,
+.form__submit-btn .loader-overlay {
+  display: inline-block;
+}
+
 .client-row__edit-btn .loader-spinner-small {
+  margin-right: 4px;
   color: #9873FF;
 }
 
 .form__submit-btn .loader-spinner-small {
+  margin-right: 4px;
   color: #B89EFF;
 }
 
