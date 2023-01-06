@@ -49,6 +49,8 @@ img {
   font-weight: 400;
   background-color: #F5F5F5;
   word-wrap: break-word;
+  font-size: 14px;
+  line-height: 19px;
 }
 
 .btn-reset {
@@ -184,8 +186,8 @@ main {
 
 .modal-wrapper {
   background-color: #fff;
-  min-height: 400px;
-  width: 44%;
+  /* min-height: 400px; */
+  width: min(92%, 450px);
 }
 
 .modal-overlay.modal-open {

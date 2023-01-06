@@ -26,7 +26,7 @@ function createForm({ onSave, onEdit, onDelete }, client) {
   const formTitleEl = createHtml({
     tagName: 'h2',
     classes: ['form__title'],
-    attributes: {id: editForm? 'editClForm': 'newClForm'},
+    attributes: { id: editForm ? 'editClForm' : 'newClForm' },
     inner: editForm ? `Изменить данные <span class="text--grey title-id">ID: ${client.id}</span>` : 'Новый клиент',
   })
   const closeBtn = createHtml({
@@ -41,19 +41,19 @@ function createForm({ onSave, onEdit, onDelete }, client) {
     createHtml({
       tagName: 'input',
       classes: ['form__input', 'surname-input'],
-      attributes: { name: 'surname', type: 'text', placeholder: editForm ? '' : 'Фамилия' },
+      attributes: { name: 'surname', type: 'text' },
       value: editForm ? formatStr(client.surname) : ''
     }),
     createHtml({
       tagName: 'input',
       classes: ['form__input', 'name-input'],
-      attributes: { name: 'name', type: 'text', placeholder: editForm ? '' : 'Имя' },
+      attributes: { name: 'name', type: 'text' },
       value: editForm ? formatStr(client.name) : ''
     }),
     createHtml({
       tagName: 'input',
       classes: ['form__input', 'lastname-input'],
-      attributes: { name: 'lastName', type: 'text', placeholder: editForm ? '' : 'Отчество' },
+      attributes: { name: 'lastName', type: 'text' },
       value: editForm ? formatStr(client.lastName) : ''
     })
   ]
@@ -63,10 +63,24 @@ function createForm({ onSave, onEdit, onDelete }, client) {
     const label = createHtml({
       tagName: 'label',
       classes: ['form__label'],
-      text: editForm ? labelsText[i] : '',
+      inner: `<span class="form__input-placeholder">${labelsText[i]}</span>`
+      // text: editForm ? labelsText[i] : '',
     })
-    label.append(inputs[i]);
+    label.prepend(inputs[i]);
     inputBlocks.push(label)
+  }
+  for (const input of inputs) {
+    const placeholder = input.nextElementSibling;
+    if (input.value) {
+      placeholder.classList.add('filled-input-value')
+    }
+
+    input.onblur = () => {
+      if (!input.value) {
+        placeholder.classList.remove('filled-input-value')
+      }
+    }
+
   }
   // создаем блок с контактами
   const contactsWrap = createHtml({
@@ -86,7 +100,9 @@ function createForm({ onSave, onEdit, onDelete }, client) {
     </svg> Добавить контакт`
   })
   // валидация с just-validate plugin
-  validation = new JustValidate(formEl)
+  validation = new JustValidate(formEl, {
+
+  })
   validation
     .addField(inputs[0], [
       {
@@ -122,6 +138,13 @@ function createForm({ onSave, onEdit, onDelete }, client) {
       }, {
         rule: 'required',
         errorMessage: 'Обязательное поле'
+      }
+    ])
+    .addField(inputs[2], [
+      {
+        rule: 'customRegexp',
+        value: /^[a-zA-zа-яёА-ЯЁ]+$/,
+        errorMessage: 'Недопустимые символы'
       }
     ])
     .onSuccess((e) => {
@@ -163,13 +186,13 @@ function createForm({ onSave, onEdit, onDelete }, client) {
   const addDelContactListener = addDelContactHandler(contactsGroup, addContactBtn)
   document.addEventListener('click', addDelContactListener)
 
-    // при закрытии модалки сбрасывается валидация и ненужные обработчики
-    document.addEventListener('modalOnClose', function resetValidation(e) {
-      validation.refresh();
-      document.removeEventListener('click', addDelContactListener)
-      document.removeEventListener('modalOnClose', resetValidation)
+  // при закрытии модалки сбрасывается валидация и ненужные обработчики
+  document.addEventListener('modalOnClose', function resetValidation(e) {
+    validation.refresh();
+    document.removeEventListener('click', addDelContactListener)
+    document.removeEventListener('modalOnClose', resetValidation)
 
-    })
+  })
 
   // обработчики кнопок формы удаления клиента/отмены
   cancelOrDelBtn.addEventListener('click', editForm ? deleteClientHandler(onDelete, client.id) : cancelClientHandler)
@@ -213,12 +236,12 @@ function createSingleContact(contactDataObj) {
   const valueInput = createHtml({
     tagName: 'input',
     classes: ['contact-single__value-input'],
-    attributes: { type: inputType, name: 'contactValue' },
+    attributes: { type: inputType, name: 'contactValue', placeholder: 'Введите данные контакта' },
     value: contactVal,
   })
 
   // маска на телефон(плагин Inputmask)
-  if(inputType === 'tel') setMask(valueInput)
+  if (inputType === 'tel') setMask(valueInput)
 
   const deleteContactBtn = createHtml({
     tagName: 'button',
@@ -234,10 +257,10 @@ function createSingleContact(contactDataObj) {
 
   // добавляем поле валидации для контакта(just-validate plugin)
   validation.addField(valueInput, [
-      {
-        rule: 'required',
-        errorMessage: 'Заполните поле контакта'
-      }
+    {
+      rule: 'required',
+      errorMessage: 'Заполните поле контакта'
+    }
   ])
 
   // choices plugin
@@ -266,7 +289,7 @@ function createSingleContact(contactDataObj) {
       // обработчик добавляет в селект доп контакт с задержкой 700ms, после чего удаляет доп инпут
       additInput.addEventListener('input', function (e) {
         addValue = this.value
-        this.onblur =() => {
+        this.onblur = () => {
           customSelect.setValue([addValue]), this.remove()
         }
       })
@@ -284,9 +307,9 @@ function createSingleContact(contactDataObj) {
 function setInputType(el, type) {
   const valueInput = el.closest('fieldset').elements.contactValue
   valueInput.setAttribute('type', `${type}`);
-  if(type == 'tel') {
+  if (type == 'tel') {
     setMask(valueInput)
-  } else if(valueInput.inputmask){
+  } else if (valueInput.inputmask) {
     valueInput.inputmask.remove()
   }
 }
@@ -303,10 +326,10 @@ function checkContactsCount(count, btn) {
 }
 // обработчик кнопок удалить/добавить контакт
 function addDelContactHandler(contactsGroup, addContactBtn) {
-  return function(e) {
+  return function (e) {
     const existingContacts = contactsGroup.querySelectorAll('.contact-single').length
     let count = existingContacts ? existingContacts : 0
-    if (e.target === addContactBtn) {
+    if (e.target.closest('.contacts-group__add-btn') === addContactBtn) {
       let singleContact = createSingleContact()
       contactsGroup.append(singleContact)
       singleContact.querySelector('.choices').focus()
@@ -342,7 +365,7 @@ function formClientObj(form) {
 // обработчик изменения данных о клиенте
 function editSubmitHandler(form, onEdit, clientId) {
   let clientData = formClientObj(form)
-    onEdit(clientData, clientId, form)
+  onEdit(clientData, clientId, form)
 }
 // обработчик сохранения нового клиента
 function saveSubmitHandler(form, onSave) {
@@ -363,7 +386,7 @@ function cancelClientHandler(e) {
 // форматирование строки возвращает строку с заглавной буквы
 function formatStr(str) {
   let trimmed = str.trim();
-  if(trimmed) {
+  if (trimmed) {
     return trimmed[0].toUpperCase() + trimmed.slice(1);
   }
   return trimmed

@@ -1,6 +1,7 @@
+
 .form {
   position: relative;
-  padding: 24px 30px 30px;
+  padding: 24px 0 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -10,27 +11,44 @@
   position: absolute;
   top: 15px;
   right: 15px;
+  outline: none;
+  font-weight: 600;
+  transition: color 0.3s linear;
 }
 
-/* .edit-client-form {}
+.form__close-btn:focus-visible,
+.form__close-btn:hover:not(:focus-visible) {
+  color: rgba(152, 115, 255, 1);
 
-.add-client-form {} */
+}
 
 .form__title {
   margin: 0;
+  margin-bottom: 32px;
+  padding: 0 30px;
   font-weight: 700;
   font-size: 18px;
   line-height: 25px;
   color: #333333;
 }
 
-
+.title-id {
+  padding-left: 10px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+}
 
 /* inputs */
 .form__label {
+  position: relative;
   margin-bottom: 32px;
+  padding-left: 30px;
+  padding-right: 30px;
   padding-bottom: 4px;
   width: 100%;
+  font-size: 14px;
+  line-height: 19px;
   border-bottom: 1px solid rgba(200, 197, 209, 0.5);
 }
 
@@ -39,10 +57,13 @@
 }
 
 .form__input {
+  padding: 5px 0;
   width: 100%;
-  font-size: 14px;
-  line-height: 19px;
-  border: none;
+  font-size: inherit;
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  appearance: none;
 }
 
 .surname-input {}
@@ -51,14 +72,58 @@
 
 .lastname-input {}
 
-/* contacts */
-.contacts-wrap {
-  align-self: center;
+.form__input-placeholder {
+  position: absolute;
+  left: 30px;
+  bottom: 7px;
+  color: #B0B0B0;
+  pointer-events: none;
+  transition: bottom 0.3s ease, transfrom 0.3s ease;
 }
 
-.contacts-group {}
+.form__input-placeholder::after {
+  content: '*';
+  color: rgba(152, 115, 255, 1);
+}
 
-.contacts-group__add-btn {}
+.lastname-input+.form__input-placeholder::after {
+  content: '';
+}
+
+.form__input:focus+.form__input-placeholder,
+.filled-input-value {
+  bottom: 100%;
+  transform: scale(0.8);
+  transform-origin: left;
+}
+
+/* contacts */
+.contacts-wrap {
+  /* align-self: center; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 30px;
+  margin-bottom: 25px;
+  width: 100%;
+  background-color: rgba(200, 197, 209, 0.2);
+}
+
+.contacts-group {
+  width: 100%;
+}
+
+.contacts-group__add-btn {
+  font-weight: 600;
+  outline: none;
+  transition: color 0.3s linear;
+}
+
+.contacts-group__add-btn:focus-visible,
+.contacts-group__add-btn:hover:not(:focus-visible) {
+  color: rgba(152, 115, 255, 1);
+}
+
 
 .contacts-group__add-btn svg {
   color: #9873FF;
@@ -66,32 +131,74 @@
 
 .contact-single {
   display: flex;
+  margin: 0;
+  padding: 15px 0;
+  width: 100%;
+  border: 0;
 }
 
 .contact-single__type {}
 
 .type {
+  flex-shrink: 0;
   display: inline-block;
   position: relative;
-  width: 123px;
+  width: max(33%, 110px);
 
 }
 
 .additional-contact-type {
   /*styles for additional input for "Доп.контакты" in select*/
-  width: 100%;
   position: absolute;
   top: 100%;
   left: 0;
+  padding: 0;
+  padding: 10px 10px;
+  width: 100%;
+  outline: none;
+  border-radius: 0;
+  appearance: none;
+  /* min-height: 37px; */
+  border: 1px solid rgba(200, 197, 209, 1);
 }
 
 
-.contact-single__value-input {}
+.contact-single__value-input {
+  flex-grow: 1;
+  padding: 0;
+  padding: 10px 10px;
+  outline: none;
+  border-radius: 0;
+  appearance: none;
+  border: 1px solid rgba(200, 197, 209, 1);
+}
 
-.contact-single__delete-btn {}
+.contact-single__value-input:focus {
+  box-shadow: inset 0px 1px 4px 2px rgba(51, 51, 51, 0.3);
+}
+
+.contact-single__delete-btn {
+  flex-shrink: 0;
+  padding: 11px 6px;
+  background-color: #E7E5EB;
+  border: 1px solid rgba(200, 197, 209, 1);
+  transition: background-color 0.3s linear;
+}
+
+.contact-single__delete-btn:focus-visible,
+.contact-single__delete-btn:hover:not(:focus-visible) {
+  background-color: rgba(51, 51, 51, 0.2);
+}
 
 .contact-single__delete-btn svg {
+  display: block;
   color: #B0B0B0;
+  transition: color 0.3s linear;
+}
+
+.contact-single__delete-btn:focus-visible svg,
+.contact-single__delete-btn:hover:not(:focus-visible) svg {
+  color: #333333;
 }
 
 /* choices styles */
@@ -99,38 +206,122 @@
   margin: 0;
 }
 
+.choices__inner {
+  transition: all 0.3s linear;
+}
+
+.choices.is-focused .choices__inner,
+.choices__inner:hover {
+  background-color: rgba(51, 51, 51, 0.2);
+}
+
+
+
 .choices__list--dropdown .choices__item,
 .choices__list[aria-expanded] .choices__item {
   padding: 10px;
 }
 
+.choices[data-type*=select-one]::after {
+  height: 8px;
+  width: 8px;
+  z-index: 3;
+  top: 50%;
+  border: 1px solid #9873FF;
+  border-width: 0 0 1px 1px;
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease-in-out;
+}
+
+.choices[data-type*=select-one].is-open::after {
+  top: 60%;
+  border: 1px solid #9873FF;
+  border-width: 0 0 1px 1px;
+  transform: rotate(135deg);
+}
+
+
+
 .form__submit-btn {
   align-self: center;
+  padding: 12.5px 35px;
+  margin-bottom: 5px;
+  background-color: rgba(128, 82, 255, 1);
+  font-weight: 600;
+  color: #fff;
+  outline: none;
+  transition: background-color 0.3s linear;
 }
 
-/* styles only for new client form */
-.add-client-form {}
-
-.add-client-form .form__title {
-  margin-bottom: 32px;
-}
-.add-client-form .form__input::placeholder {
-  color: #B0B0B0;
+.form__submit-btn:focus-visible,
+.form__submit-btn:hover:not(:focus-visible) {
+  background-color: rgba(128, 82, 255, 0.5);
 }
 
-.add-client-form .surname-input::after {
-
-}
-
-.form__cancel-btn {
+.form__cancel-btn,
+.form__delete-btn {
   align-self: center;
+  font-size: 12px;
+  line-height: 16px;
+  /* padding-bottom: 2px; */
+  border-bottom: 1px solid #333333;
+  outline: none;
+  transition: color 0.3s linear, border-color 0.3s linear;
 }
 
-/* styles only for edit form */
-.edit-client-form {}
+.form__cancel-btn:focus-visible,
+.form__delete-btn:focus-visible,
+.form__cancel-btn:hover:not(:focus-visible),
+.form__delete-btn:hover:not(:focus-visible) {
+  color: rgba(152, 115, 255, 1);
+  border-color: rgba(152, 115, 255, 1)
+}
 
-.edit-client-form .form__title {}
+/* just validate */
 
-.title-id {}
+.just-validate-error-label {
+  position: absolute;
+  right: 30px;
+  bottom: 100%;
+  font-size: 12px;
+}
 
-.form__delete-btn {}
+@media (max-width: 576px) {
+  .form__title,.form__label {
+    padding: 0 15px;
+  }
+  .form__input-placeholder {
+    left: 15px;
+  }
+  .contacts-wrap {
+    padding: 10px 15px;
+  }
+  .contact-single__value-input {
+    width: max(130px,48%);
+  }
+}
+
+/* del.contact modal */
+.confirm {
+
+}
+
+.confirm__close-btn {
+
+}
+
+.confirm__title {
+
+}
+
+.confirm__question {
+
+}
+
+.confirm__del-btn {
+
+}
+
+.confirm__cancel-btn {
+
+}
