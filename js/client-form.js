@@ -74,10 +74,10 @@ function createForm({ onSave, onEdit, onDelete }, client) {
     if (input.value) {
       placeholder.classList.add('filled-input-value')
     }
-    input.addEventListener('input', function(e) {
-      if(input.value) placeholder.classList.add('filled-input-value')
+    input.addEventListener('input', function (e) {
+      if (input.value) placeholder.classList.add('filled-input-value')
     })
-    input.addEventListener('blur', function(e) {
+    input.addEventListener('blur', function (e) {
       if (!input.value) {
         placeholder.classList.remove('filled-input-value')
       }
@@ -343,9 +343,10 @@ function addDelContactHandler(contactsGroup, addContactBtn) {
     if (delBtn) {
       count--;
       checkContactsCount(count, addContactBtn)
-      e.target.closest('.contact-single').remove()
+      const contactToDel = e.target.closest('.contact-single');
+      validation.removeField(contactToDel.elements.contactValue);
+      contactToDel.remove()
     }
-
   }
 }
 // ф-я формирование объекта с данными клиента

@@ -229,15 +229,21 @@ const search = new SearchAutocomplete(searchForm, searchInput, {
 })
 // ф-я выделяет найденного клиента в таблице и скроллит к нему
 function markClient(e) {
-  let tableWrap = document.querySelector('.table-wrap');
-  let resId = e.currentTarget.querySelector('.result-id').textContent
-  let elToScroll = tableWrap.querySelector(`[data-row-id="${resId}"]`)
-  elToScroll.scrollIntoView({ block: "center", behavior: "smooth" });
-  elToScroll.classList.add('client-found');
+  const tableWrap = document.querySelector('.table-wrap');
+  const resId = e.currentTarget.querySelector('.result-id').textContent;
+  const tableRows = tableWrap.querySelectorAll('[data-row-id]');
+  for(const row of tableRows) removeMark(row);//удаляем предыдущее выделение
+  const rowToMark = tableWrap.querySelector(`[data-row-id="${resId}"]`);
+  rowToMark.scrollIntoView({ block: "center", behavior: "smooth" });
+  rowToMark.classList.add('client-found');
   tableWrap.addEventListener('click', function (e) {
-    if (e.target.closest('client-row') == elToScroll) return
-    elToScroll.classList.remove('client-found')
+    if (e.target.closest('client-row') == rowToMark) return
+    removeMark(rowToMark)
   })
+}
+
+function removeMark(tRow) {
+  tRow.classList.remove('client-found')
 }
 
 /*
